@@ -15,28 +15,28 @@ var io = socketIO(server);
 app.use(express.static(publicPath));
 
 
-var  sockets= [];
+//var  sockets= [];
 io.on('connection', ((socket) => {
     console.log('new user connected');
     
-    sockets.push(socket);
+    //sockets.push(socket);
     
-    // socket.on('sendEmail', ((data) => {
-    //     console.log('user disconnected',data);
-    // }));
 
     socket.on('createMessage', ((data) => {
 
-        data.createdAt = Date.now();
+        data.createdAt = new Date().getTime();
+        
+        io.emit('newMessage',data)
 
-        sockets.forEach((item)=>{
-            if(socket.id !== item.id)
-            {
-                item.emit('newMessage',data);                    
-            }
-        })
 
-    }));
+        // sockets.forEach((item)=>{
+        //     if(socket.id !== item.id)
+        //     {
+        //         item.emit('newMessage',data);                    
+        //     }
+        }));
+
+
 
 
     socket.on('disconnect', (() => {

@@ -17,11 +17,6 @@ socket.on('newMessage', function (data) {
     console.log('new message:',data);
 })
 
-      socket.emit('createMessage',{
-        "from" : "me",
-        "text" : "the way"
-    })
-
 
  dodo = function(){
       socket.emit('sendEmail',{
