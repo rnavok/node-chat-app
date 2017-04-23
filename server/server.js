@@ -2,6 +2,9 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
+const validator = require('validator');
+const dateformat = require('dateformat');
+
 
 const publicPath = path.join(__dirname + '/../public');
 
@@ -18,17 +21,22 @@ app.use(express.static(publicPath));
 //var  sockets= [];
 io.on('connection', ((socket) => {
     console.log('new user connected');
-    
+
+    socket.broadcast.emit('newMessage',{"createdAt" : dateformat(new Date(),"shortTime"),text:"New user added"});
+    socket.emit('newMessage',{"createdAt" : dateformat(new Date(),"shortTime"),text:"Welcome to the chat"});
     //sockets.push(socket);
     
 
     socket.on('createMessage', ((data) => {
 
-        data.createdAt = new Date().getTime().toString();
+        if(!validator.isEmpty(data.text)){
+        data.createdAt = dateformat(new Date(),"shortTime")
         
-        io.emit('newMessage',data)
+        // io.emit('newMessage',data)
+        
+        socket.broadcast.emit('newMessage',data)
 
-
+    }
         // sockets.forEach((item)=>{
         //     if(socket.id !== item.id)
         //     {

@@ -13,7 +13,9 @@
   "author": "ran",
   "license": "ISC",
   "dependencies": {
+    "dateformat": "^2.0.0",
     "express": "^4.15.2",
-    "socket.io": "^1.7.3"
+    "socket.io": "^1.7.3",
+    "validator": "^7.0.0"
   }
 }
