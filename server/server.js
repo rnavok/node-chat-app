@@ -1,9 +1,9 @@
 const path = require('path');
 const http = require('http');
-const express=  require('express');
+const express = require('express');
 const socketIO = require('socket.io');
 
-const publicPath = path.join(__dirname+'/../public');
+const publicPath = path.join(__dirname + '/../public');
 
 const port = process.env.PORT || 3000;
 var app = express();
@@ -14,21 +14,46 @@ var io = socketIO(server);
 
 app.use(express.static(publicPath));
 
-io.on('connection',((socket)=>{
+
+var  sockets= [];
+io.on('connection', ((socket) => {
     console.log('new user connected');
+    
+    sockets.push(socket);
+    
+    // socket.on('sendEmail', ((data) => {
+    //     console.log('user disconnected',data);
+    // }));
 
-    socket.on('disconnect',((socket)=>{
-    console.log('user disconnected');
+    socket.on('createMessage', ((data) => {
+
+        data.createdAt = Date.now();
+
+        sockets.forEach((item)=>{
+            if(socket.id !== item.id)
+            {
+                item.emit('newMessage',data);                    
+            }
+        })
+
+    }));
+
+
+    socket.on('disconnect', (() => {
+        console.log('user disconnected');
+    }));
+
+//    socket.emit('newEmail',{
+//        "from" : "rnavok@gmail.com",
+//        "to": "UFO"
+//    });
+
 }));
 
-}));
-
-
-
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
     res.send('hello');
 });
 
-server.listen(port ,()=>{
-    console.log('server is up and running on port' + port); 
+server.listen(port, () => {
+    console.log('server is up and running on port' + port);
 });
