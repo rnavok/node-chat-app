@@ -4,7 +4,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 const validator = require('validator');
 const dateformat = require('dateformat');
-
+var {generateMessage} = require('./util/message')
 
 const publicPath = path.join(__dirname + '/../public');
 
@@ -21,8 +21,8 @@ app.use(express.static(publicPath));
 //var  sockets= [];
 io.on('connection', ((socket) => {
     console.log('new user connected');
-
-    socket.broadcast.emit('newMessage',{"createdAt" : dateformat(new Date(),"shortTime"),text:"New user added"});
+    
+    socket.broadcast.emit('newMessage',generateMessage("admin","New user joined the chat"));
     socket.emit('newMessage',{"createdAt" : dateformat(new Date(),"shortTime"),text:"Welcome to the chat"});
     //sockets.push(socket);
     
@@ -34,7 +34,7 @@ io.on('connection', ((socket) => {
         
         // io.emit('newMessage',data)
         
-        socket.broadcast.emit('newMessage',data)
+        socket.broadcast.emit('newMessage',generateMessage(data.from,data.text))
 
     }
         // sockets.forEach((item)=>{

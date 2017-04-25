@@ -59,7 +59,7 @@ wage.addEventListener("keydown", function (e) {
     var iDiv = document.createElement('div');
     
     iDiv.className = 'mytextBlob';
-    iDiv.innerHTML= `[${new Date().getHours()}:${new Date().getMinutes()}] ${text}`;
+    iDiv.innerHTML= `[${new Date().getHours()}:${new Date().getMinutes()}] ${text}</br>`;
     d.appendChild(iDiv);
     updateScroll();
       

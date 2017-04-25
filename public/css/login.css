@@ -20,6 +20,7 @@ body {
   border-style: solid;
   background-color: #eee111;   
   overflow-y:scroll;
+  vertical-align: bottom;
 }
 
 
@@ -31,6 +32,7 @@ body {
     width: 90%;
     background-color : #336699;
     color: white;
+border-radius: 15px;
 
 }
 .otherstextBlob
@@ -41,6 +43,7 @@ body {
     width: 90%;
     background-color : #ff3366;
     color: white;
+     border-radius: 15px;
      
 }
 
