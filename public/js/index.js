@@ -1,22 +1,54 @@
+var counter = 0;
 var scrolled = false;
-function updateScroll(){
-    if(!scrolled){
-        var element = document.getElementById("content");
-        element.scrollTop = element.scrollHeight;
+function updateScroll() {
+    if (!scrolled) {
+
+        var element = $("#content");
+        element.scrollTop(document.getElementById("content").scrollHeight);
     }
 }
 
 // document.getElementById("content").addEventListener("scroll", function () {scrolled=true;});
 
+bgThing = function (num) {
+
+    switch (num) {
+        case 1:
+            $('#content').css("background-image", 'url("./../media/img/bg/1.jpg")');
+            break;
+        case 2:
+            $('#content').css("background-image", 'url("./../media/img/bg/2.jpg")');
+            break;
+        case 3:
+            $('#content').css("background-image", 'url("./../media/img/bg/3.jpg")');
+            break;
+               case 4:
+            $('#content').css("background-image", 'url("./../media/img/bg/4.jpg")');
+            break;
+               case 5:
+            $('#content').css("background-image", 'url("./../media/img/bg/5.jpg")');
+            break;
+        default:
+            $('#content').css("background-image", 'url("./../media/img/bg/1.jpg")');
+            break;
+    }
+}
+
+
+
+$('#messageForm').submit(function (e) {
+    e.preventDefault();
+    addTextLine();
+});
 
 var socket = io();
 socket.on('connect', function () {
     console.log('connected to server');
 
-  
+
 })
 
-socket.on('disconnect', function () {    
+socket.on('disconnect', function () {
     console.log('disconnected from server');
 })
 
@@ -24,47 +56,79 @@ socket.on('disconnect', function () {
 //     console.log('new email',data);
 // })
 
-socket.on('newMessage', function (data) {    
-    console.log('new message:',data);
-    var d = document.getElementById('content');
-    var iDiv = document.createElement('div');
-    
-    iDiv.className = 'otherstextBlob';
-    iDiv.innerHTML= `[${data.createdAt}] ${data.text}</br>`;
-    d.appendChild(iDiv);
-    updateScroll();
-    // d.innerHTML = d.innerHTML  + `[${data.createdAt}]`+  data.text +    "</br>";
-})
-
-var wage = document.getElementById("inputLine");
-wage.addEventListener("keydown", function (e) {
-    if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
-      dodo();
-    }
-});
 
 
+$(document).ready(function () {
 
- dodo = function(){
+    var audioElement = document.createElement('audio');
+    audioElement.setAttribute('src', './../media/sounds/newMessage/surprise-on-a-spring.mp3');
+    audioElement.setAttribute('autoplay:false', 'autoplay');
+    //audioElement.load code above. if you take out :false from the code the file will auto play than everythin works the same after that()
+    $.get();
 
-      var inp = document.getElementById('inputLine');
-      var text = inp.value;      
-      inp.value = '';
+    audioElement.addEventListener("load", function () {
+        audioElement.play();
+    }, true);
 
-      if (text=== "")
-        return ;
-    var d = document.getElementById('content');
-   // d.appendChild(`<div class="mystextBlob">[${new Date().getTime()} ${text}] </div>`);
-    
-    var iDiv = document.createElement('div');
-    
-    iDiv.className = 'mytextBlob';
-    iDiv.innerHTML= `[${new Date().getHours()}:${new Date().getMinutes()}] ${text}</br>`;
-    d.appendChild(iDiv);
-    updateScroll();
-      
-      socket.emit('createMessage',{              
-        "from" : "ranchi",
-        "text" : text
+    socket.on('newMessage', function (data) {
+        audioElement.play();
+        var d = $('#content');
+        var iDiv = document.createElement('div');
+        console.log(d);
+        iDiv.className = 'otherstextBlob';
+        iDiv.innerHTML = `[${new Date(data.createdAt).toLocaleTimeString()}] ${data.text}</br>`;
+        d.append(iDiv);
+        updateScroll();
+        // d.innerHTML = d.innerHTML  + `[${data.createdAt}]`+  data.text +    "</br>";
     })
-}
+
+    var wage = document.getElementById("inputLine");
+    wage.addEventListener("keydown", function (e) {
+        if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+            addTextLine();
+        }
+    });
+
+
+
+    addTextLine = function () {
+
+        counter++;
+        var inp = $('#inputLine');
+
+        var text = inp.val();
+        console.log(text);
+        inp.val('');
+
+
+        if (text === "")
+            return;
+        var d = $('#content');
+        // d.appendChild(`<div class="mystextBlob">[${new Date().getTime()} ${text}] </div>`);
+
+        var iDiv = document.createElement('div');
+        iDiv.id = "message_" + counter;
+        iDiv.className = 'mytextBlob';
+        iDiv.innerHTML = `[${new Date().getHours()}:${new Date().getMinutes()}] ${text}</br>`;
+
+        // <span id="v_${iDiv.id}" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        d.append(iDiv);
+        updateScroll();
+
+        socket.emit('createMessage', {
+            "from": "ranchi",
+            "text": text,
+            "messageID": iDiv.id
+        }, function (acno) {
+            var d = $('#content');
+            var ispan = document.createElement('span');
+            // iDiv.id = "message_"+counter;
+            ispan.className = 'glyphicon glyphicon-ok';
+            ispan.setAttribute("aria-hidden", true);
+
+            $(`#${acno}`).append(ispan);
+            // setAttribute("red", "red");
+        })
+    }
+
+});

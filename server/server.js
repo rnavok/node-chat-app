@@ -23,18 +23,23 @@ io.on('connection', ((socket) => {
     console.log('new user connected');
     
     socket.broadcast.emit('newMessage',generateMessage("admin","New user joined the chat"));
-    socket.emit('newMessage',{"createdAt" : dateformat(new Date(),"shortTime"),text:"Welcome to the chat"});
+    socket.emit('newMessage',{"createdAt" : new Date().toISOString(),text:"Welcome to the chat"});
     //sockets.push(socket);
     
 
-    socket.on('createMessage', ((data) => {
+    socket.on('createMessage', ((data,callback) => {
 
         if(!validator.isEmpty(data.text)){
         data.createdAt = dateformat(new Date(),"shortTime")
         
         // io.emit('newMessage',data)
         
-        socket.broadcast.emit('newMessage',generateMessage(data.from,data.text))
+        socket.broadcast.emit('newMessage',generateMessage(data.from,data.text));
+
+        setTimeout(function() {
+            callback(data.messageID);
+        }, 3000);
+        
 
     }
         // sockets.forEach((item)=>{
