@@ -35,7 +35,8 @@ io.on('connection', ((socket) => {
             // io.emit('newMessage',data)
 
             socket.broadcast.emit('newMessage', generateMessage(data.from, data.text));
-
+            
+            callback(data.messageID);
             // setTimeout(function() {
             //     callback(data.messageID);
             // }, 3000);
@@ -50,7 +51,7 @@ io.on('connection', ((socket) => {
     }));
 
     socket.on('newLocationMessage', (coords,callback) => {
-        console.log(coords);
+        
 
         if (! (null == coords)) {
 
@@ -58,8 +59,10 @@ io.on('connection', ((socket) => {
 
             // io.emit('newMessage',data)
 
-            socket.broadcast.emit('locationUpdateMessage', generateLocationMessage(coords))
+            socket.broadcast.emit('locationUpdateMessage', generateLocationMessage(coords));
+           
         }
+         callback('ok');
     });
 
 

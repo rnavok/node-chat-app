@@ -71,15 +71,17 @@ $(document).ready(function () {
             return alert("your browser ");
         }
 
+        locationButton.attr('disabled','disabled')
         navigator.geolocation.getCurrentPosition(function (position)  {            
             socket.emit('newLocationMessage', {
                 "coords" : {
                     "lng" : position.coords.longitude,
                     "lat" : position.coords.latitude
-            }                
+            }}, function (echo)  {
+                locationButton.removeAttr('disabled')
+        });
         }, function (err)  {
-            alert('unable to fatch location');
-        })
+            locationButton.removeAttr('disabled')
         })
     });
 
@@ -105,10 +107,13 @@ $(document).ready(function () {
         var d = $('#content');
         var iDiv = document.createElement('div');
         iDiv.className = 'otherstextBlob';
+        var linkAdd = document.createElement('a');
+        linkAdd.setAttribute('href',locationObj.link);
         var img = document.createElement('img');
         img.setAttribute("class","img-rounded img-responsive")
         img.src = locationObj.imgLink;
-        iDiv.appendChild(img)
+        linkAdd.appendChild(img)
+        iDiv.appendChild(linkAdd)
         // iDiv.innerHTML = `[${new Date(data.createdAt).toLocaleTimeString()}] ${data.text}</br>`;
         d.append(iDiv);
         updateScroll();
