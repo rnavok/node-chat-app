@@ -72,6 +72,7 @@ $(document).ready(function () {
         }
 
         locationButton.attr('disabled','disabled')
+
         navigator.geolocation.getCurrentPosition(function (position)  {            
             socket.emit('newLocationMessage', {
                 "coords" : {
@@ -92,17 +93,28 @@ $(document).ready(function () {
     socket.on('newMessage', function (data) {
         audioElement.play();
         var d = $('#content');
-        var iDiv = document.createElement('div');
-        console.log(d);
-        iDiv.className = 'otherstextBlob';
-        iDiv.innerHTML = `[${new Date(data.createdAt).toLocaleTimeString()}] ${data.text}</br>`;
-        d.append(iDiv);
+
+        
+        var template = $('#message-template').html();
+        var html = Mustache.render(template,{
+            text : data.text,
+            messageID : "message_" + counter,
+            className : 'otherstextBlob',
+            createdAt :  moment().format('HH:MM')
+        });
+
+        // var iDiv = document.createElement('div');
+        // console.log(d);
+        // iDiv.className = 'otherstextBlob';
+        // var date  =  moment(data.createdAt);
+        // iDiv.innerHTML = `[${date.format('HH:MM')}] ${data.text}</br>`;
+       // iDiv.innerHTML = `[${new Date(data.createdAt).toLocaleTimeString()}] ${data.text}</br>`;
+        d.append(html);
         updateScroll();
         // d.innerHTML = d.innerHTML  + `[${data.createdAt}]`+  data.text +    "</br>";
     });
 
     socket.on('locationUpdateMessage', function (locationObj) {
-        console.log(locationObj);
         audioElement.play();
         var d = $('#content');
         var iDiv = document.createElement('div');
@@ -143,19 +155,30 @@ $(document).ready(function () {
         var d = $('#content');
         // d.appendChild(`<div class="mystextBlob">[${new Date().getTime()} ${text}] </div>`);
 
-        var iDiv = document.createElement('div');
-        iDiv.id = "message_" + counter;
-        iDiv.className = 'mytextBlob';
-        iDiv.innerHTML = `[${new Date().toLocaleTimeString()}] ${text}</br>`;
-
+        // var iDiv = document.createElement('div');
+        // iDiv.id = "message_" + counter;
+        // iDiv.className = 'mytextBlob';
+       
+        // iDiv.innerHTML = `[${date.format('HH:MM')}] ${text}</br>`;
+        // iDiv.innerHTML = `[${new Date().toLocaleTimeString()}] ${text}</br>`;
         // <span id="v_${iDiv.id}" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-        d.append(iDiv);
+        var date  =  moment().format('HH:MM');
+        var template = $('#message-template').html();
+        var html = Mustache.render(template,{
+            text : text,
+            messageID : "message_" + counter,
+            className : 'mytextBlob',
+            createdAt :  moment().format('HH:MM')
+        });
+
+
+        d.append(html);
         updateScroll();
 
         socket.emit('createMessage', {
             "from": "ranchi",
             "text": text,
-            "messageID": iDiv.id
+            "messageID": "message_" + counter
         }, function (acno) {
             var d = $('#content');
             var ispan = document.createElement('span');

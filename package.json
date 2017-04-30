@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server/server.js",
     "test": "mocha server/**/*.test.js",
-    "test-watch" : "nodemon --exec 'npm test'"
+    "test-watch": "nodemon --exec 'npm test'"
   },
   "engines": {
     "node": "6.10.1"
@@ -16,6 +16,7 @@
   "dependencies": {
     "dateformat": "^2.0.0",
     "express": "^4.15.2",
+    "moment": "^2.18.1",
     "socket.io": "^1.7.3",
     "validator": "^7.0.0"
   },

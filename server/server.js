@@ -4,6 +4,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 const validator = require('validator');
 const dateformat = require('dateformat');
+
 var { generateMessage, generateLocationMessage } = require('./util/message')
 
 const publicPath = path.join(__dirname + '/../public');
@@ -36,10 +37,10 @@ io.on('connection', ((socket) => {
 
             socket.broadcast.emit('newMessage', generateMessage(data.from, data.text));
             
-            callback(data.messageID);
-            // setTimeout(function() {
-            //     callback(data.messageID);
-            // }, 3000);
+            // callback(data.messageID);
+            setTimeout(function() {
+                callback(data.messageID);
+            }, 3000);
 
 
         }
