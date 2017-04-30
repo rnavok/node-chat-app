@@ -22,10 +22,10 @@ bgThing = function (num) {
         case 3:
             $('#content').css("background-image", 'url("./../media/img/bg/3.jpg")');
             break;
-               case 4:
+        case 4:
             $('#content').css("background-image", 'url("./../media/img/bg/4.jpg")');
             break;
-               case 5:
+        case 5:
             $('#content').css("background-image", 'url("./../media/img/bg/5.jpg")');
             break;
         default:
@@ -46,15 +46,12 @@ socket.on('connect', function () {
     console.log('connected to server');
 
 
-})
+});
 
 socket.on('disconnect', function () {
     console.log('disconnected from server');
-})
+});
 
-// socket.on('newEmail', function (data) {    
-//     console.log('new email',data);
-// })
 
 
 
@@ -65,6 +62,26 @@ $(document).ready(function () {
     audioElement.setAttribute('autoplay:false', 'autoplay');
     //audioElement.load code above. if you take out :false from the code the file will auto play than everythin works the same after that()
     $.get();
+
+
+    var locationButton = $("#locationButton");
+    
+    locationButton.on('click', (e) => {
+        if (!navigator.geolocation) {
+            return alert("your browser ");
+        }
+
+        navigator.geolocation.getCurrentPosition(function (position)  {            
+            socket.emit('newLocationMessage', {
+                "coords" : {
+                    "lng" : position.coords.longitude,
+                    "lat" : position.coords.latitude
+            }                
+        }, function (err)  {
+            alert('unable to fatch location');
+        })
+        })
+    });
 
     audioElement.addEventListener("load", function () {
         audioElement.play();
@@ -80,7 +97,22 @@ $(document).ready(function () {
         d.append(iDiv);
         updateScroll();
         // d.innerHTML = d.innerHTML  + `[${data.createdAt}]`+  data.text +    "</br>";
-    })
+    });
+
+    socket.on('locationUpdateMessage', function (locationObj) {
+        console.log(locationObj);
+        audioElement.play();
+        var d = $('#content');
+        var iDiv = document.createElement('div');
+        iDiv.className = 'otherstextBlob';
+        var img = document.createElement('img');
+        img.setAttribute("class","img-rounded img-responsive")
+        img.src = locationObj.imgLink;
+        iDiv.appendChild(img)
+        // iDiv.innerHTML = `[${new Date(data.createdAt).toLocaleTimeString()}] ${data.text}</br>`;
+        d.append(iDiv);
+        updateScroll();
+    });
 
     var wage = document.getElementById("inputLine");
     wage.addEventListener("keydown", function (e) {
@@ -109,7 +141,7 @@ $(document).ready(function () {
         var iDiv = document.createElement('div');
         iDiv.id = "message_" + counter;
         iDiv.className = 'mytextBlob';
-        iDiv.innerHTML = `[${new Date().getHours()}:${new Date().getMinutes()}] ${text}</br>`;
+        iDiv.innerHTML = `[${new Date().toLocaleTimeString()}] ${text}</br>`;
 
         // <span id="v_${iDiv.id}" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
         d.append(iDiv);

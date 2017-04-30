@@ -4,7 +4,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 const validator = require('validator');
 const dateformat = require('dateformat');
-var {generateMessage} = require('./util/message')
+var { generateMessage, generateLocationMessage } = require('./util/message')
 
 const publicPath = path.join(__dirname + '/../public');
 
@@ -21,45 +21,56 @@ app.use(express.static(publicPath));
 //var  sockets= [];
 io.on('connection', ((socket) => {
     console.log('new user connected');
-    
-    socket.broadcast.emit('newMessage',generateMessage("admin","New user joined the chat"));
-    socket.emit('newMessage',{"createdAt" : new Date().toISOString(),text:"Welcome to the chat"});
+
+    socket.broadcast.emit('newMessage', generateMessage("admin", "New user joined the chat"));
+    socket.emit('newMessage', { "createdAt": new Date().toISOString(), text: "Welcome to the chat" });
     //sockets.push(socket);
-    
 
-    socket.on('createMessage', ((data,callback) => {
 
-        if(!validator.isEmpty(data.text)){
-        data.createdAt = dateformat(new Date(),"shortTime")
-        
-        // io.emit('newMessage',data)
-        
-        socket.broadcast.emit('newMessage',generateMessage(data.from,data.text));
+    socket.on('createMessage', ((data, callback) => {
 
-        setTimeout(function() {
-            callback(data.messageID);
-        }, 3000);
-        
+        if (!validator.isEmpty(data.text)) {
+            data.createdAt = dateformat(new Date(), "shortTime")
 
-    }
+            // io.emit('newMessage',data)
+
+            socket.broadcast.emit('newMessage', generateMessage(data.from, data.text));
+
+            // setTimeout(function() {
+            //     callback(data.messageID);
+            // }, 3000);
+
+
+        }
         // sockets.forEach((item)=>{
         //     if(socket.id !== item.id)
         //     {
         //         item.emit('newMessage',data);                    
         //     }
-        }));
+    }));
 
+    socket.on('newLocationMessage', (coords,callback) => {
+        console.log(coords);
 
+        if (! (null == coords)) {
+
+            // data.createdAt = dateformat(new Date(), "shortTime")
+
+            // io.emit('newMessage',data)
+
+            socket.broadcast.emit('locationUpdateMessage', generateLocationMessage(coords))
+        }
+    });
 
 
     socket.on('disconnect', (() => {
         console.log('user disconnected');
     }));
 
-//    socket.emit('newEmail',{
-//        "from" : "rnavok@gmail.com",
-//        "to": "UFO"
-//    });
+    //    socket.emit('newEmail',{
+    //        "from" : "rnavok@gmail.com",
+    //        "to": "UFO"
+    //    });
 
 }));
 

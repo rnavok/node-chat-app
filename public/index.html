@@ -28,15 +28,17 @@
 </head>
 
 <body>
-    <div class="container main">
+    <div class="container fill main">
         <div class="starter-template">
-            <h4 class="blog-title">Dush and Ranchi</h1>
                 <div class="row">                    
                     <div class="col-xs-10"><p class="lead blog-description">The official chat of Dush and Ranchi and Toltol.</p></div >
-                    <div class="col-xs-2"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal"><span  id="basic-addon1" class="glyphicon glyphicon-cog"></span></button></div>
+                    <div class="col-xs-2">
+                        <button type="button" class="btn btn-info"  id="locationButton"><span  class="glyphicon glyphicon-map-marker"></span></button>
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal"><span  id="basic-addon1" class="glyphicon glyphicon-cog"></span></button>
+                        </div>
                 </div>
         </div>
-        <div class="thetext" id="content" class="panel-body"></div>
+        <div class="thetext panel-body fill img-responsive" id="content" ></div>
         <form id="messageForm">
             <div id=line class="form-signin">
                 <div class="input-group">
