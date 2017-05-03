@@ -9,6 +9,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
+    <link rel="stylesheet"  href="./fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    
 
 
     <title></title>
@@ -25,105 +27,48 @@
     <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"-->
     <!--crossorigin="anonymous"></script>-->
 
+
 </head>
-
 <body>
-    <div class="container fill main">
-        <div class="starter-template">
-                <div class="row">                    
-                    <div class="col-xs-10"><p class="lead blog-description">The official chat of Dush and Ranchi and Toltol.</p></div >
-                    <div class="col-xs-2">
-                        <button type="button" class="btn btn-info"  id="locationButton"><span  class="glyphicon glyphicon-map-marker"></span></button>
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal"><span  id="basic-addon1" class="glyphicon glyphicon-cog"></span></button>
-                        </div>
-                </div>
+   <div class="container">
+ <form id="loginForm" class="form-signin" >
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputEmail" class="sr-only">Name</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="email" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
         </div>
-        <div class="thetext panel-body fill img-responsive" id="content" >
-
-
-        </div>
-        <form id="messageForm">
-            <div id=line class="form-signin">
-                <div class="input-group">
-
-
-                    <input id="inputLine" type="text" class="form-control" aria-describedby="basic-addon1" autofocus autocomplete="off">
-                    <span class="input-group-btn">
-                              <button class="btn btn-default" type="submit"><span  id="basic-addon1" class="glyphicon glyphicon-send input-group-addon"></span>
-</button>
-                          
-                </div>
-
+        <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#myModal" type="submit">Sign in</button>
+      </form>
+        <div id="messages">
             </div>
-        </form>
-      
-    </div>
+   </div>
 
 
 
-<!-- Modal -->
+
+
+
+
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">background</h4>
+        <!--<button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">background</h4>-->
   <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Background</a></li>
-    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
-  </ul>
 </div>
-
-
-
-      
-      <div class="modal-body">
-
-
-
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="home">        <p>Select background image.</p>
-          <div class="row">
-            <div class="col-xs-6 col-md-3" >
-                <a href="#" class="thumbnail"  onclick="bgThing(1)">
-                    <img src="./media/img/bg/1.jpg">
-                </a>
-            </div>
-            <div class="col-xs-6 col-md-3" >
-                <a href="#" class="thumbnail" onclick="bgThing(2)">
-                    <img src="./media/img/bg/2.jpg"  >
-                </a>
-            </div>
-            <div class="col-xs-6 col-md-3" >
-                <a href="#" class="thumbnail" onclick="bgThing(3)">
-                    <img src="./media/img/bg/3.jpg" >
-                </a>
-            </div>
-              <div class="col-xs-6 col-md-3" >
-                <a href="#" class="thumbnail" onclick="bgThing(4)">
-                    <img src="./media/img/bg/4.jpg" >
-                </a>
-            </div>
-              <div class="col-xs-6 col-md-3" >
-                <a href="#" class="thumbnail" onclick="bgThing(5)">
-                    <img src="./media/img/bg/5.jpg" >
-                </a>
-            </div>
-
-            
-        </div></div>
-
-    <div role="tabpanel" class="tab-pane" id="profile">...</div>
-  </div>
-
-
-
+    
+      <div class="modal-body">procesing loging request
+        <span class="fa fa-spinner fa-spin" style="font-size:50px ;color:blue" ></span>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
       </div>
     </div>
 
@@ -131,15 +76,9 @@
 </div>
 
 
-    <script id="message-template" type="text/template">
-        <div class="row">
-            <div class="{{className}}" id='{{messageID}}'><h4>{{text}}</h4><h6>{{createdAt}}</h6></div>
-        </div>
-    </script>
 
-
-
-    <script src="/socket.io/socket.io.js"></script>
+</body>
+   <!--<script src="/socket.io/socket.io.js"></script>-->
 
     <script src="/js/libs/jquery-3.2.1.min.js"></script>
  
@@ -149,12 +88,5 @@
  
     <script src="/js/index.js"></script>
 
-
     <script src="/js/libs/bootstrap.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <!--<script src="js/bootstrap.min.js"></script>-->
-
-
-</body>
-
 </html>
